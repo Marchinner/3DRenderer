@@ -36,7 +36,7 @@ void Application::run()
 		m_renderer->beginImguiFrame();
 
 		// ImGui UI elements
-		//ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow();
 
 		// Show metrics
 		showMetrics();
