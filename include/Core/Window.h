@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
-#include <GLFW/glfw3.h>
+
+struct GLFWwindow;
+class Logger;
 
 class Window
 {
@@ -20,6 +22,7 @@ public:
 private:
 	static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
+	Logger& m_logger;
 	std::string m_title;
 	int m_width;
 	int m_height;

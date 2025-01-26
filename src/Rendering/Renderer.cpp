@@ -1,4 +1,6 @@
-#include "Rendering\Renderer.h"
+#include "Rendering/Renderer.h"
+#include "Utils/Logger.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
@@ -7,10 +9,12 @@
 #include <iostream>
 
 Renderer::Renderer(GLFWwindow* nativeWindow)
+	: m_logger{ Logger::getInstance() }
 {
+	m_logger.log("Initializing renderer...", Logger::Level::Info);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cerr << "Failed to initialize Glad!" << std::endl;
+		m_logger.log("Failed to initialize Glad", Logger::Level::Error);
 		exit(EXIT_FAILURE);
 	}
 
@@ -59,11 +63,12 @@ void Renderer::setupOpenGL()
 	glCullFace(GL_BACK);     // Cull back faces
 	glFrontFace(GL_CCW);     // Counter-clockwise front faces
 
-	std::cout << "OpenGL settings initialized." << std::endl;
+	m_logger.log("Setting OpenGL settings...", Logger::Level::Info);
 }
 
 void Renderer::setupImgui(GLFWwindow* window)
 {
+	m_logger.log("Initializing ImGui...", Logger::Level::Info);
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
@@ -74,6 +79,4 @@ void Renderer::setupImgui(GLFWwindow* window)
 
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
-
-	std::cout << "ImGui initialized." << std::endl;
 }

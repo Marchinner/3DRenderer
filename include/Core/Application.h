@@ -1,6 +1,9 @@
 #pragma once
-#include "Window.h"
-#include <Rendering/Renderer.h>
+
+class Window;
+class Renderer;
+class Logger;
+
 class Application
 {
 public:
@@ -15,6 +18,7 @@ private:
 	void showMetrics() const;
 
 private:
+	Logger& m_logger;
 	Window* m_window;
 	Renderer* m_renderer;
 };

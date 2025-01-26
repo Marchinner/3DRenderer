@@ -1,5 +1,6 @@
 #pragma once
 
+class Logger;
 struct GLFWwindow;
 struct ImGuiIO;
 
@@ -15,6 +16,7 @@ public:
 	void endImguiFrame() const;
 	ImGuiIO& getImguiIo() const;
 private:
+	Logger& m_logger;
 	void setupOpenGL();
 	void setupImgui(GLFWwindow* window);
 };

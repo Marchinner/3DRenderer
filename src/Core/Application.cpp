@@ -1,13 +1,20 @@
-#include <Core/Application.h>
+#include "Core/Application.h"
+#include "Core/Window.h"
+#include "Rendering/Renderer.h"
+#include "Utils/Logger.h"
+
 #include <imgui/imgui.h>
 
 Application::Application()
-	: m_window{ nullptr }, m_renderer{ nullptr } {}
+	: m_logger{ Logger::getInstance() }
+	, m_window{ nullptr }
+	, m_renderer{ nullptr } {}
 
 Application::~Application() {}
 
 bool Application::initialize()
 {
+	m_logger.log("Initializing application...", Logger::Level::Info);
 	m_window = new Window("3D Model Renderer", 1280, 720);
 	if (!m_window->initialize())
 	{
@@ -20,6 +27,7 @@ bool Application::initialize()
 
 void Application::run()
 {
+	m_logger.log("Application is now RUNNING!", Logger::Level::Info);
 	while (!m_window->shouldClose())
 	{
 		m_window->pollEvents();
@@ -45,6 +53,7 @@ void Application::run()
 
 void Application::shutdown()
 {
+	m_logger.log("Shutting down...", Logger::Level::Info);
 	delete m_window;
 	delete m_renderer;
 }

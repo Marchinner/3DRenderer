@@ -1,8 +1,15 @@
-#include "Core\Window.h"
+#include "Core/Window.h"
+#include "Utils/Logger.h"
+
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 Window::Window(const std::string& windowTitle, int windowWidth, int windowHeight)
-	: m_title{ windowTitle }, m_width{ windowWidth }, m_height{ windowHeight }, m_window{ nullptr }
+	: m_logger{ Logger::getInstance() }
+	, m_title{ windowTitle }
+	, m_width{ windowWidth }
+	, m_height{ windowHeight }
+	, m_window{ nullptr }
 {
 }
 
@@ -14,9 +21,10 @@ Window::~Window()
 
 bool Window::initialize()
 {
+	m_logger.log("Initializing GLFW...", Logger::Level::Info);
 	if (!glfwInit())
 	{
-		std::cerr << "Failed to initialize GLFW!" << std::endl;
+		m_logger.log("Failed to initialize GLFW", Logger::Level::Error);
 		return false;
 	}
 
@@ -26,10 +34,11 @@ bool Window::initialize()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
+	m_logger.log("Creating application window...", Logger::Level::Info);
 	m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
 	if (!m_window)
 	{
-		std::cerr << "Failed to create GLFW window!" << std::endl;
+		m_logger.log("Failed to create application window", Logger::Level::Error);
 		glfwTerminate();
 		return false;
 	}
@@ -37,6 +46,7 @@ bool Window::initialize()
 	glfwMakeContextCurrent(m_window);
 
 	// Register callback for resizing
+	m_logger.log("Registering window's callbacks...", Logger::Level::Info);
 	glfwSetFramebufferSizeCallback(m_window, framebufferSizeCallback);
 
 	// Enable V-Sync
