@@ -46,6 +46,11 @@ void Renderer::endImguiFrame() const
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+ImGuiIO& Renderer::getImguiIo() const
+{
+	return ImGui::GetIO();
+}
+
 void Renderer::setupOpenGL()
 {
 	glEnable(GL_DEPTH_TEST);  // Enable depth testing
@@ -61,6 +66,9 @@ void Renderer::setupImgui(GLFWwindow* window)
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 	ImGui::StyleColorsDark();
 

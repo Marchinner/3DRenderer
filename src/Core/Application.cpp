@@ -28,8 +28,11 @@ void Application::run()
 		m_renderer->beginImguiFrame();
 
 		// ImGui UI elements
-		ImGui::ShowDemoWindow();
-		
+		//ImGui::ShowDemoWindow();
+
+		// Show metrics
+		showMetrics();
+
 		m_renderer->clear();
 		m_renderer->render();
 
@@ -44,4 +47,24 @@ void Application::shutdown()
 {
 	delete m_window;
 	delete m_renderer;
+}
+
+void Application::showMetrics() const
+{
+	// Metrics
+	ImGuiWindowFlags metrics_window_flags = 0;
+	metrics_window_flags |= ImGuiWindowFlags_NoTitleBar;
+	metrics_window_flags |= ImGuiWindowFlags_NoBackground;
+	metrics_window_flags |= ImGuiWindowFlags_NoMove;
+	metrics_window_flags |= ImGuiWindowFlags_NoDecoration;
+	metrics_window_flags |= ImGuiWindowFlags_NoMouseInputs;
+	ImGui::Begin("Metrics", (bool*)0, metrics_window_flags);
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)"
+		, 1000.0f / m_renderer->getImguiIo().Framerate
+		, m_renderer->getImguiIo().Framerate);
+	ImGui::Text("%d vertices, %d indices (%d triangles)"
+		, m_renderer->getImguiIo().MetricsRenderVertices
+		, m_renderer->getImguiIo().MetricsRenderIndices
+		, m_renderer->getImguiIo().MetricsRenderIndices / 3);
+	ImGui::End();
 }
