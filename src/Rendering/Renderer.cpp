@@ -10,6 +10,8 @@
 
 Renderer::Renderer(GLFWwindow* nativeWindow)
 	: m_logger{ Logger::getInstance() }
+	, m_tShader{ nullptr }
+	, m_tVAO{ 0 }
 {
 	m_logger.log("Initializing renderer...", Logger::Level::Info);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -21,6 +23,7 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
 	// OpenGL settings
 	Renderer::setupOpenGL();
 	Renderer::setupImgui(nativeWindow);
+	Renderer::setupTriangle();
 }
 
 Renderer::~Renderer() {}
@@ -34,7 +37,9 @@ void Renderer::clear() const
 
 void Renderer::render() const
 {
-	// Rendering logic here
+	m_tShader->use();
+	glBindVertexArray(m_tVAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void Renderer::beginImguiFrame() const
@@ -57,12 +62,6 @@ ImGuiIO& Renderer::getImguiIo() const
 
 void Renderer::setupOpenGL()
 {
-	glEnable(GL_DEPTH_TEST);  // Enable depth testing
-	glDepthFunc(GL_LESS);    // Depth testing function
-	glEnable(GL_CULL_FACE);  // Enable backface culling
-	glCullFace(GL_BACK);     // Cull back faces
-	glFrontFace(GL_CCW);     // Counter-clockwise front faces
-
 	m_logger.log("Setting OpenGL settings...", Logger::Level::Info);
 }
 
@@ -79,4 +78,46 @@ void Renderer::setupImgui(GLFWwindow* window)
 
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
+}
+
+void Renderer::setupTriangle()
+{
+	m_tShader = new Shader("assets/shaders/triangle.vert", "assets/shaders/triangle.frag");
+
+	// set up vertex data (and buffer(s)) and configure vertex attributes
+	// ------------------------------------------------------------------
+	float vertices[] = {
+		 0.5f,  0.5f, 0.0f,  // top right
+		 0.5f, -0.5f, 0.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f,  // bottom left
+		-0.5f,  0.5f, 0.0f   // top left 
+	};
+	unsigned int indices[] = {  // note that we start from 0!
+		0, 1, 3,  // first Triangle
+		1, 2, 3   // second Triangle
+	};
+
+	unsigned int VBO;
+	unsigned int EBO;
+	glGenVertexArrays(1, &m_tVAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+	glBindVertexArray(m_tVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+	glBindVertexArray(0);
 }
