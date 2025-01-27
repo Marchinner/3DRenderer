@@ -1,5 +1,6 @@
 #pragma once
 #include "Shader.h"
+#include <Models/Triangle.h>
 
 class Logger;
 struct GLFWwindow;
@@ -18,13 +19,11 @@ public:
 	ImGuiIO& getImguiIo() const;
 
 private:
-	void setupTriangle();
 	void setupOpenGL();
 	void setupImgui(GLFWwindow* window);
 
 private:
 	Logger& m_logger;
-	Shader* m_tShader;
-	unsigned int m_tVAO;
+	Triangle* m_triangle;
 };
 
