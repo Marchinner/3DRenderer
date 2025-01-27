@@ -1,4 +1,5 @@
 #pragma once
+#include "Shader.h"
 
 class Logger;
 struct GLFWwindow;
@@ -15,9 +16,15 @@ public:
 	void beginImguiFrame() const;
 	void endImguiFrame() const;
 	ImGuiIO& getImguiIo() const;
+
 private:
-	Logger& m_logger;
+	void setupTriangle();
 	void setupOpenGL();
 	void setupImgui(GLFWwindow* window);
+
+private:
+	Logger& m_logger;
+	Shader* m_tShader;
+	unsigned int m_tVAO;
 };
 
