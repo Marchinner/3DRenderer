@@ -16,7 +16,6 @@ public:
 	void render() const;
 	void beginImguiFrame() const;
 	void endImguiFrame() const;
-	ImGuiIO& getImguiIo() const;
 
 private:
 	void setupOpenGL();

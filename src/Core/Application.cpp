@@ -69,11 +69,11 @@ void Application::showMetrics() const
 	metrics_window_flags |= ImGuiWindowFlags_NoMouseInputs;
 	ImGui::Begin("Metrics", (bool*)0, metrics_window_flags);
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)"
-		, 1000.0f / m_renderer->getImguiIo().Framerate
-		, m_renderer->getImguiIo().Framerate);
+		, 1000.0f / ImGui::GetIO().Framerate
+		, ImGui::GetIO().Framerate);
 	ImGui::Text("%d vertices, %d indices (%d triangles)"
-		, m_renderer->getImguiIo().MetricsRenderVertices
-		, m_renderer->getImguiIo().MetricsRenderIndices
-		, m_renderer->getImguiIo().MetricsRenderIndices / 3);
+		, ImGui::GetIO().MetricsRenderVertices
+		, ImGui::GetIO().MetricsRenderIndices
+		, ImGui::GetIO().MetricsRenderIndices / 3);
 	ImGui::End();
 }

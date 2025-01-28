@@ -19,6 +19,17 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
 		exit(EXIT_FAILURE);
 	}
 
+	// Setup OpenGL debug callback
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback([](GLenum source, GLenum type, GLuint id,
+		GLenum severity, GLsizei lenght, const GLchar* message, const void* userParam)
+		{
+			if (severity > GL_DEBUG_SEVERITY_NOTIFICATION)
+			{
+				std::cerr << "GL ERROR: " << message << std::endl;
+			}
+		}, nullptr);
+
 	// OpenGL settings
 	Renderer::setupOpenGL();
 	Renderer::setupImgui(nativeWindow);
@@ -51,11 +62,6 @@ void Renderer::endImguiFrame() const
 {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-ImGuiIO& Renderer::getImguiIo() const
-{
-	return ImGui::GetIO();
 }
 
 void Renderer::setupOpenGL()
