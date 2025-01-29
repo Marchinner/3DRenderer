@@ -1,5 +1,6 @@
 #include "Core/Window.h"
 #include "Utils/Logger.h"
+#include "Core/InputManager.h"
 
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -52,12 +53,19 @@ bool Window::initialize()
 	// Enable V-Sync
 	glfwSwapInterval(1);
 
+	glfwSetKeyCallback(m_window, InputManager::keyCallback);
+
 	return true;
 }
 
 void Window::pollEvents() const
 {
 	glfwPollEvents();
+
+	if (InputManager::isKeyDown(GLFW_KEY_ESCAPE))
+	{
+		glfwSetWindowShouldClose(m_window, GL_TRUE);
+	}
 }
 
 void Window::swapBuffers() const

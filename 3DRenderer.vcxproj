@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
+    <ClCompile Include="src\Core\InputManager.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Models\Triangle.cpp" />
     <ClCompile Include="src\Program.cpp" />
@@ -154,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.h" />
+    <ClInclude Include="include\Core\InputManager.h" />
     <ClInclude Include="include\Core\Window.h" />
     <ClInclude Include="include\Models\Triangle.h" />
     <ClInclude Include="include\Rendering\Renderer.h" />
