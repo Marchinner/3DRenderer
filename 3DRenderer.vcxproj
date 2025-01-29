@@ -152,6 +152,7 @@
     <ClCompile Include="vendor\ImGUI\imgui_stdlib.cpp" />
     <ClCompile Include="vendor\ImGUI\imgui_tables.cpp" />
     <ClCompile Include="vendor\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="vendor\stb\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="vendor\ImGUI\imstb_textedit.h" />
     <ClInclude Include="vendor\ImGUI\imstb_truetype.h" />
     <ClInclude Include="vendor\KHR\khrplatform.h" />
+    <ClInclude Include="vendor\stb\stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
