@@ -5,17 +5,21 @@
 
 #include <imgui/imgui.h>
 
+//#define SHOW_DEMO_UI
+#define SHOW_METRICS_UI
+
 Application::Application()
 	: m_logger{ Logger::getInstance() }
 	, m_window{ nullptr }
-	, m_renderer{ nullptr } {}
+	, m_renderer{ nullptr } {
+}
 
 Application::~Application() {}
 
 bool Application::initialize()
 {
 	m_logger.log("Initializing application...", Logger::Level::Info);
-	m_window = new Window("3D Model Renderer", 1280, 720);
+	m_window = new Window("3D Model Renderer", 800, 600);
 	if (!m_window->initialize())
 	{
 		return false;
@@ -35,11 +39,15 @@ void Application::run()
 		// Start ImGui frame
 		m_renderer->beginImguiFrame();
 
-		// ImGui UI elements
-		//ImGui::ShowDemoWindow();
+#ifdef SHOW_DEMO_UI
+		// ImGui Demor UI elements
+		ImGui::ShowDemoWindow();
+#endif
 
+#ifdef SHOW_METRICS_UI
 		// Show metrics
 		showMetrics();
+#endif
 
 		m_renderer->clear();
 		m_renderer->render();
