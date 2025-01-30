@@ -48,6 +48,20 @@ Cube::Cube()
 {glm::vec3{-0.5f,  0.5f, -0.5f}, glm::vec2{ 0.0f, 1.0f}}
 	};
 
+	// world space positions of our cubes
+	m_cubePositions = {
+		glm::vec3{0.0f,  0.0f,  0.0f},
+		glm::vec3{2.0f,  5.0f, -15.0f},
+		glm::vec3{-1.5f, -2.2f, -2.5f},
+		glm::vec3{-3.8f, -2.0f, -12.3f},
+		glm::vec3{2.4f, -0.4f, -3.5f},
+		glm::vec3{-1.7f,  3.0f, -7.5f},
+		glm::vec3{1.3f, -2.0f, -2.5f},
+		glm::vec3{1.5f,  2.0f, -2.5f},
+		glm::vec3{1.5f,  0.2f, -1.5f},
+		glm::vec3{-1.3f,  1.0f, -1.5f}
+	};
+
 	glGenVertexArrays(1, &m_vao);
 	unsigned int vbo;
 	glGenBuffers(1, &vbo);
@@ -77,9 +91,9 @@ Cube::~Cube()
 
 void Cube::draw() const
 {
-	// model
-	glm::mat4 model = glm::mat4{ 1.0f };
-	model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3{ 0.5f, 1.0f, 0.0f });
+	//// model
+	//glm::mat4 model = glm::mat4{ 1.0f };
+	//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3{ 0.5f, 1.0f, 0.0f });
 
 
 	// view
@@ -93,11 +107,18 @@ void Cube::draw() const
 	m_texture->bind();
 	m_shader->use();
 
-	glUniformMatrix4fv(glGetUniformLocation(m_shader->getId(), "model"), 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(glGetUniformLocation(m_shader->getId(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(glGetUniformLocation(m_shader->getId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 	glBindVertexArray(m_vao);
-	glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(m_vertices.size()));
+	for (unsigned int i = 0; i < 10; i++)
+	{
+		glm::mat4 model = glm::mat4{ 1.0f };
+		model = glm::translate(model, m_cubePositions[i]);
+		float angle = 20.0f * i;
+		model = glm::rotate(model, glm::radians(angle), glm::vec3{ 1.0f, 0.3f, 0.5f });
+		glUniformMatrix4fv(glGetUniformLocation(m_shader->getId(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(m_vertices.size()));
+	}
 	glBindVertexArray(0);
 }

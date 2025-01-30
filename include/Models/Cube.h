@@ -22,6 +22,7 @@ public:
 
 private:
 	std::vector<Vertex> m_vertices{};
+	std::vector<glm::vec3> m_cubePositions{};
 	unsigned int m_vao{ 0 };
 	Shader* m_shader{ nullptr };
 	Texture* m_texture{ nullptr };
