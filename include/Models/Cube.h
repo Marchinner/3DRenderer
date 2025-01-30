@@ -5,29 +5,25 @@
 #include <Rendering/Texture.h>
 #include "Rendering/Shader.h"
 
-
-class Rectangle
+class Cube
 {
 public:
 
 	struct Vertex
 	{
 		glm::vec3 position;
-		glm::vec3 color;
 		glm::vec2 texture;
 	};
 
-	Rectangle();
-	~Rectangle();
+	Cube();
+	~Cube();
 
 	void draw() const;
 
 private:
 	std::vector<Vertex> m_vertices{};
-	std::vector<unsigned int> m_indices{};
 	unsigned int m_vao{ 0 };
 	Shader* m_shader{ nullptr };
 	Texture* m_texture{ nullptr };
-	Texture* m_texture2{ nullptr };
 };
 

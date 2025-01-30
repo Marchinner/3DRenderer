@@ -10,8 +10,6 @@
 
 Renderer::Renderer(GLFWwindow* nativeWindow)
 	: m_logger{ Logger::getInstance() }
-	, m_triangle{ nullptr }
-	, m_rectangle{ nullptr }
 {
 	m_logger.log("Initializing renderer...", Logger::Level::Info);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -37,6 +35,7 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
 
 	m_triangle = new Triangle();
 	m_rectangle = new Rectangle();
+	m_cube = new Cube();
 }
 
 Renderer::~Renderer() {}
@@ -51,7 +50,8 @@ void Renderer::clear() const
 void Renderer::render() const
 {
 	//m_triangle->draw();
-	m_rectangle->draw();
+	//m_rectangle->draw();
+	m_cube->draw();
 }
 
 void Renderer::beginImguiFrame() const

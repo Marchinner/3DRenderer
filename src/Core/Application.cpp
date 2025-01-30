@@ -19,7 +19,7 @@ Application::~Application() {}
 bool Application::initialize()
 {
 	m_logger.log("Initializing application...", Logger::Level::Info);
-	m_window = new Window("3D Model Renderer", 800, 600);
+	m_window = new Window("3D Model Renderer", 1280, 720);
 	if (!m_window->initialize())
 	{
 		return false;

@@ -51,18 +51,27 @@ Rectangle::~Rectangle()
 
 void Rectangle::draw() const
 {
-	glm::mat4 trans = glm::mat4{ 1.0f };
-	trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3{0.0, 0.0, 1.0});
-	trans = glm::scale(trans, glm::vec3{ 0.5, 0.5, 0.5 });
+	// model
+	glm::mat4 model = glm::mat4{ 1.0f };
+	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3{ 1.0f, 0.0f, 0.0f });
+
+	// view
+	glm::mat4 view = glm::mat4{ 1.0f };
+	view = glm::translate(view, glm::vec3{ 0.0f, 0.0f, -3.0f });
+
+	// projection
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
 
 	m_shader->use();
-	m_texture->bind();
+	
+	glUniformMatrix4fv(glGetUniformLocation(m_shader->getId(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(glGetUniformLocation(m_shader->getId(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(glGetUniformLocation(m_shader->getId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
+	m_texture->bind();
 	glUniform1i(glGetUniformLocation(m_shader->getId(), "texture2"), 1);
 	m_texture2->bind(GL_TEXTURE1);
-
-	unsigned int transformLoc = glGetUniformLocation(m_shader->getId(), "transform");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, static_cast<int>(m_indices.size()), GL_UNSIGNED_INT, 0);

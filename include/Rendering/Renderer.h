@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include <Models/Triangle.h>
 #include <Models/Rectangle.h>
+#include <Models/Cube.h>
 
 class Logger;
 struct GLFWwindow;
@@ -24,7 +25,8 @@ private:
 
 private:
 	Logger& m_logger;
-	Triangle* m_triangle;
-	Rectangle* m_rectangle;
+	Triangle* m_triangle{ nullptr };
+	Rectangle* m_rectangle{ nullptr };
+	Cube* m_cube{ nullptr };
 };
 
