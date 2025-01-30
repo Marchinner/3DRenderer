@@ -1,4 +1,6 @@
 #include "Models/Rectangle.h"
+#include <GLFW/glfw3.h>
+#include <glm/gtc/type_ptr.hpp>
 
 Rectangle::Rectangle()
 {
@@ -49,10 +51,19 @@ Rectangle::~Rectangle()
 
 void Rectangle::draw() const
 {
+	glm::mat4 trans = glm::mat4{ 1.0f };
+	trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3{0.0, 0.0, 1.0});
+	trans = glm::scale(trans, glm::vec3{ 0.5, 0.5, 0.5 });
+
 	m_shader->use();
 	m_texture->bind();
+
 	glUniform1i(glGetUniformLocation(m_shader->getId(), "texture2"), 1);
 	m_texture2->bind(GL_TEXTURE1);
+
+	unsigned int transformLoc = glGetUniformLocation(m_shader->getId(), "transform");
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, static_cast<int>(m_indices.size()), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

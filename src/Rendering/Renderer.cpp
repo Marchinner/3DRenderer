@@ -45,7 +45,7 @@ void Renderer::clear() const
 {
 	// Clear the screen with a color
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::render() const
@@ -70,6 +70,7 @@ void Renderer::endImguiFrame() const
 void Renderer::setupOpenGL()
 {
 	m_logger.log("Setting OpenGL settings...", Logger::Level::Info);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::setupImgui(GLFWwindow* window)
