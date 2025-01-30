@@ -1,6 +1,7 @@
 #pragma once
 #include "Shader.h"
 #include <Models/Triangle.h>
+#include <Models/Rectangle.h>
 
 class Logger;
 struct GLFWwindow;
@@ -24,5 +25,6 @@ private:
 private:
 	Logger& m_logger;
 	Triangle* m_triangle;
+	Rectangle* m_rectangle;
 };
 

@@ -11,6 +11,7 @@
 Renderer::Renderer(GLFWwindow* nativeWindow)
 	: m_logger{ Logger::getInstance() }
 	, m_triangle{ nullptr }
+	, m_rectangle{ nullptr }
 {
 	m_logger.log("Initializing renderer...", Logger::Level::Info);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -20,7 +21,6 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
 	}
 
 	// Setup OpenGL debug callback
-	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback([](GLenum source, GLenum type, GLuint id,
 		GLenum severity, GLsizei lenght, const GLchar* message, const void* userParam)
 		{
@@ -29,12 +29,14 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
 				std::cerr << "GL ERROR: " << message << std::endl;
 			}
 		}, nullptr);
+	glEnable(GL_DEBUG_OUTPUT);
 
 	// OpenGL settings
 	Renderer::setupOpenGL();
 	Renderer::setupImgui(nativeWindow);
 
 	m_triangle = new Triangle();
+	m_rectangle = new Rectangle();
 }
 
 Renderer::~Renderer() {}
@@ -48,7 +50,8 @@ void Renderer::clear() const
 
 void Renderer::render() const
 {
-	m_triangle->draw();
+	//m_triangle->draw();
+	m_rectangle->draw();
 }
 
 void Renderer::beginImguiFrame() const

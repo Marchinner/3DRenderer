@@ -54,4 +54,5 @@ void Triangle::draw() const
 	m_texture->bind();
 	glBindVertexArray(m_vao);
 	glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(m_vertex.size()));
+	glBindVertexArray(0);
 }

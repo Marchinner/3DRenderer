@@ -4,15 +4,17 @@
 #include <vector>
 #include <Rendering/Texture.h>
 
-struct Vertex {
-	glm::vec3 position;
-	glm::vec3 color;
-	glm::vec2 texture;
-};
 
 class Triangle
 {
 public:
+
+	struct Vertex {
+		glm::vec3 position;
+		glm::vec3 color;
+		glm::vec2 texture;
+	};
+
 	Triangle();
 	~Triangle();
 
