@@ -4,7 +4,7 @@
 
 Rectangle::Rectangle()
 {
-	m_shader = new Shader{ "assets/shaders/rectangle.vert", "assets/shaders/rectangle.frag" };
+	m_shader = new Shader{ "shaders/rectangle.vert", "shaders/rectangle.frag" };
 	m_texture = Texture::loadFromFile("assets/textures/container.jpg");
 	m_texture2 = Texture::loadFromFile("assets/textures/awesomeface.png");
 	m_vertices = {

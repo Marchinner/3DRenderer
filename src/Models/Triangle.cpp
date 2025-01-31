@@ -8,7 +8,7 @@ Triangle::Triangle()
 	, m_shader{ nullptr }
 	, m_texture{ nullptr }
 {
-	m_shader = new Shader("assets/shaders/triangle.vert", "assets/shaders/triangle.frag");
+	m_shader = new Shader("shaders/triangle.vert", "shaders/triangle.frag");
 	m_texture = Texture::loadFromFile("assets/textures/wall.jpg");
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
