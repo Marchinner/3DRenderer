@@ -12,6 +12,7 @@ public:
 
 	bool initialize();
 	void run();
+	void processInput();
 	void shutdown();
 
 private:
@@ -21,5 +22,7 @@ private:
 	Logger& m_logger;
 	Window* m_window;
 	Renderer* m_renderer;
+	float m_deltaTime{ 0.0f };
+	float m_lastFrame{ 0.0f };
 };
 

@@ -2,6 +2,7 @@
 #include "Core/Window.h"
 #include "Rendering/Renderer.h"
 #include "Utils/Logger.h"
+#include "Core/InputManager.h"
 
 #include <imgui/imgui.h>
 
@@ -34,7 +35,14 @@ void Application::run()
 	m_logger.log("Application is now RUNNING!", Logger::Level::Info);
 	while (!m_window->shouldClose())
 	{
+		// per-frame logic
+		float currentFrame = static_cast<float>(glfwGetTime());
+		m_deltaTime = currentFrame - m_lastFrame;
+		m_lastFrame = currentFrame;
+
 		m_window->pollEvents();
+
+		processInput();
 
 		// Start ImGui frame
 		m_renderer->beginImguiFrame();
@@ -57,6 +65,18 @@ void Application::run()
 
 		m_window->swapBuffers();
 	}
+}
+
+void Application::processInput()
+{
+	if (InputManager::isKeyDown(GLFW_KEY_W))
+		InputManager::getCamera()->processKeyboard(CameraMovement::FORWARD, m_deltaTime);
+	if (InputManager::isKeyDown(GLFW_KEY_A))
+		InputManager::getCamera()->processKeyboard(CameraMovement::LEFT, m_deltaTime);
+	if (InputManager::isKeyDown(GLFW_KEY_S))
+		InputManager::getCamera()->processKeyboard(CameraMovement::BACKWARD, m_deltaTime);
+	if (InputManager::isKeyDown(GLFW_KEY_D))
+		InputManager::getCamera()->processKeyboard(CameraMovement::RIGHT, m_deltaTime);
 }
 
 void Application::shutdown()

@@ -1,5 +1,6 @@
 #include "Rendering/Renderer.h"
 #include "Utils/Logger.h"
+#include "Core/InputManager.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -52,38 +53,14 @@ void Renderer::clear() const
 
 void Renderer::render() const
 {
-    //m_triangle->draw();
-    //m_rectangle->draw();
-
-    // Camera position
-    glm::vec3 cameraPos = glm::vec3{ 0.0f, 0.0f, 3.0f };
-
-    // Camera direction
-    glm::vec3 cameraTarget = glm::vec3{ 0.0f, 0.0f, 0.0f }; // looking to origin
-    glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget); // subtract and normalize
-
-    // Right camera axis
-    glm::vec3 up = glm::vec3{ 0.0f, 1.0f, 0.0f };
-    glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-
-    // Up camera vector
-    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
-
-    // Look At
-    //glm::mat4 view;
-    //view = glm::lookAt(glm::vec3{ 0.0f, 0.0f, 3.0f },	// camera position
-    //    glm::vec3{ 0.0f, 0.0f, 0.0f },	// target position
-    //    glm::vec3{ 0.0f, 1.0f, 0.0f });	// up vector
-
-    const float radius = 10.0f;
-    float camX = sin(glfwGetTime()) * radius;
-    float camZ = cos(glfwGetTime()) * radius;
-    glm::mat4 view = glm::lookAt(glm::vec3{ camX, 0.0f, camZ }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
+    glm::mat4 proj = InputManager::getCamera()->getProjection();
+    glm::mat4 view = InputManager::getCamera()->getViewMatrix();
     m_cube->getViewMatrix() = view;
+    m_cube->getProjectionMatrix() = proj;
 
     ImGui::Begin("Camera");
     ImGui::InputFloat3("View", glm::value_ptr(view), "%.1f");
-    ImGui::DragFloat3("Projection", glm::value_ptr(m_cube->getProjectionMatrix()), 0.001f, -100.0f, 100.0f, "%.1f");
+    ImGui::DragFloat3("Projection", glm::value_ptr(proj), 0.001f, -100.0f, 100.0f, "%.1f");
     ImGui::End();
 
     m_cube->draw();

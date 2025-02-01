@@ -55,6 +55,11 @@ bool Window::initialize()
 	glfwSwapInterval(1);
 
 	glfwSetKeyCallback(m_window, InputManager::keyCallback);
+	glfwSetCursorPosCallback(m_window, InputManager::mouseCallback);
+	glfwSetScrollCallback(m_window, InputManager::scrollCallback);
+
+	// tell GLFW to capture our mouse
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	return true;
 }
