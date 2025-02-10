@@ -1,4 +1,5 @@
-#include "Camera.h"
+#include "Core/Camera.h"
+#include <Core/InputManager.h>
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
     : m_position{ position }
@@ -12,6 +13,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
     , m_mouseSensitivity{ SENSITIVITY }
     , m_zoom{ ZOOM }
 {
+    updateCameraVectors();
 }
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
@@ -26,6 +28,7 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
     , m_mouseSensitivity{ SENSITIVITY }
     , m_zoom{ ZOOM }
 {
+    updateCameraVectors();
 }
 
 void Camera::processKeyboard(CameraMovement direction, float deltaTime)
@@ -47,24 +50,27 @@ void Camera::processKeyboard(CameraMovement direction, float deltaTime)
 
 void Camera::processMouseMovement(float xOffset, float yOffset)
 {
-    bool constrainPitch = true;
-    xOffset *= m_mouseSensitivity;
-    yOffset *= m_mouseSensitivity;
-
-    m_yaw += xOffset;
-    m_pitch += yOffset;
-
-    // make sure that when pitch is out of bounts, screen doesn't get flipped
-    if (constrainPitch)
+    if (InputManager::isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
     {
-        if (m_pitch > 89.0f)
-            m_pitch = 89.0f;
+        bool constrainPitch = true;
+        xOffset *= m_mouseSensitivity;
+        yOffset *= m_mouseSensitivity;
 
-        if (m_pitch < -89.0f)
-            m_pitch = -89.0f;
+        m_yaw += xOffset;
+        m_pitch += yOffset;
+
+        // make sure that when pitch is out of bounts, screen doesn't get flipped
+        if (constrainPitch)
+        {
+            if (m_pitch > 89.0f)
+                m_pitch = 89.0f;
+
+            if (m_pitch < -89.0f)
+                m_pitch = -89.0f;
+        }
+
+        updateCameraVectors();
     }
-
-    updateCameraVectors();
 }
 
 void Camera::processMouseScroll(float yOffset)

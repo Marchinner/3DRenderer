@@ -26,6 +26,12 @@ void InputManager::scrollCallback(GLFWwindow* window, double xOffset, double yOf
     m_camera->processMouseScroll(static_cast<float>(yOffset));
 }
 
+void InputManager::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (action == GLFW_PRESS) m_mouseButtonsPressed[button] = true;
+    if (action == GLFW_RELEASE) m_mouseButtonsPressed[button] = false;
+}
+
 Camera* InputManager::getCamera()
 {
     return m_camera;

@@ -3,7 +3,7 @@
 #include <Models/Triangle.h>
 #include <Models/Rectangle.h>
 #include <Models/Cube.h>
-#include "Camera.h"
+#include "Core/Camera.h"
 
 class Logger;
 struct GLFWwindow;
