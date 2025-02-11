@@ -1,33 +1,50 @@
 #pragma once
 
 #include <glm/glm.hpp>
-
+#include <string>
 #include <vector>
 #include <Rendering/Shader.h>
-#include <Rendering/Texture.h>
 
-typedef unsigned int VAO;
-typedef unsigned int VBO;
-typedef unsigned int EBO;
+#define MAX_BONE_INFLUENCE 4
 
-struct Vertex
-{
-    glm::vec3 position;
-    glm::vec2 texture;
+struct Vertex {
+    // position
+    glm::vec3 Position;
+    // normal
+    glm::vec3 Normal;
+    // texCoords
+    glm::vec2 TexCoords;
+    // tangent
+    glm::vec3 Tangent;
+    // bitangent
+    glm::vec3 Bitangent;
+	//bone indexes which will influence this vertex
+	int m_BoneIDs[MAX_BONE_INFLUENCE];
+	//weights from each bone
+	float m_Weights[MAX_BONE_INFLUENCE];
+};
+
+struct Texture {
+    unsigned int id;
+    std::string type;
+    std::string path;
 };
 
 class Mesh
 {
 public:
-    Mesh(const std::vector<Vertex>& vertices);
-    ~Mesh();
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture> textures;
+    unsigned int VAO;
 
-    void draw(const Shader& shader, const Texture& texture);
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+    void Draw(Shader &shader);
 
 private:
+    unsigned int m_vbo;
+    unsigned int m_ebo;
 
-private:
-    VAO m_vao{ 0 };
-    std::vector<Vertex> m_vertices;
+    void setupMesh();
 };
 

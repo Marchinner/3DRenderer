@@ -7,8 +7,8 @@
 
 #include <imgui/imgui.h>
 
-#define SHOW_DEMO_UI
-#define SHOW_METRICS_UI
+//#define SHOW_DEMO_UI
+//#define SHOW_METRICS_UI
 
 Application::Application()
     : m_logger{ Logger::getInstance() }

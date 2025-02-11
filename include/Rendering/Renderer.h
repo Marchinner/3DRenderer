@@ -1,9 +1,7 @@
 #pragma once
 #include "Shader.h"
-#include <Models/Triangle.h>
-#include <Models/Rectangle.h>
-#include <Models/Cube.h>
 #include "Core/Camera.h"
+#include <Models/Model.h>
 
 class Logger;
 struct GLFWwindow;
@@ -16,18 +14,18 @@ public:
 	~Renderer();
 
 	void clear() const;
-	void render() const;
+	void render();
 	void beginImguiFrame() const;
 	void endImguiFrame() const;
 
 private:
 	void setupOpenGL();
 	void setupImgui(GLFWwindow* window);
+	std::wstring OpenFileDialog();
 
 private:
 	Logger& m_logger;
-	Triangle* m_triangle{ nullptr };
-	Rectangle* m_rectangle{ nullptr };
-	Cube* m_cube{ nullptr };
+	Model* m_model{ nullptr };
+	Shader* m_shader{ nullptr };
 };
 

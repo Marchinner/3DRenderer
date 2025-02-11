@@ -1,9 +1,9 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "Rendering/Renderer.h"
 #include "Utils/Logger.h"
 #include "Core/InputManager.h"
-
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
@@ -11,6 +11,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/ext/matrix_transform.hpp>
+#include <stb/stb_image.h>
+#include <stdlib.h>
+#include <Windows.h>
+#include <commdlg.h>
 
 Renderer::Renderer(GLFWwindow* nativeWindow)
     : m_logger{ Logger::getInstance() }
@@ -37,9 +41,8 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
     Renderer::setupOpenGL();
     Renderer::setupImgui(nativeWindow);
 
-    m_triangle = new Triangle();
-    m_rectangle = new Rectangle();
-    m_cube = new Cube();
+    //m_model = new Model("./assets/models/backpack/backpack.obj");
+    m_shader = new Shader("shaders/backpack.vert", "shaders/backpack.frag");
 }
 
 Renderer::~Renderer() {}
@@ -51,19 +54,43 @@ void Renderer::clear() const
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::render() const
+void Renderer::render()
 {
     glm::mat4 proj = InputManager::getCamera()->getProjection();
     glm::mat4 view = InputManager::getCamera()->getViewMatrix();
-    m_cube->getViewMatrix() = view;
-    m_cube->getProjectionMatrix() = proj;
 
-    ImGui::Begin("Camera");
-    ImGui::InputFloat3("View", glm::value_ptr(view), "%.1f");
-    ImGui::DragFloat3("Projection", glm::value_ptr(proj), 0.001f, -100.0f, 100.0f, "%.1f");
-    ImGui::End();
+    m_shader->use();
+    m_shader->setMat4("projection", proj);
+    m_shader->setMat4("view", view);
 
-    m_cube->draw();
+    // render the loaded model
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+    model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+    m_shader->setMat4("model", model);
+
+    if (m_model)
+        m_model->Draw(*m_shader);
+
+    ImGui::BeginMainMenuBar();
+    ImGui::MenuItem("Arquivo", nullptr, nullptr, false);
+    if (ImGui::MenuItem("Abrir", "Ctrl+O"))
+    {
+        std::wstring filename = OpenFileDialog();
+        
+        size_t required_size = 0;
+        errno_t err = wcstombs_s(&required_size, nullptr, 0, filename.c_str(), 0);
+        if (err == 0 || required_size != 0)
+        {
+            std::string str(required_size, '\0');
+            wcstombs_s(&required_size, &str[0], required_size, filename.c_str(), required_size - 1);
+
+            str.pop_back();
+
+            m_model = new Model(str);
+        }
+    }
+    ImGui::EndMainMenuBar();
 }
 
 void Renderer::beginImguiFrame() const
@@ -82,6 +109,8 @@ void Renderer::endImguiFrame() const
 void Renderer::setupOpenGL()
 {
     m_logger.log("Setting OpenGL settings...", Logger::Level::Info);
+    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
+    stbi_set_flip_vertically_on_load(true);
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -98,4 +127,23 @@ void Renderer::setupImgui(GLFWwindow* window)
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 460");
+}
+
+std::wstring Renderer::OpenFileDialog()
+{
+    OPENFILENAME ofn;
+    wchar_t szFile[MAX_PATH] = { 0 };
+    ZeroMemory(&ofn, sizeof(ofn));
+
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFilter = L"Models\0*.obj\0All Files\0*.*\0";
+    ofn.lpstrFile = szFile;
+    ofn.nMaxFile = MAX_PATH;
+    ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
+
+    if (GetOpenFileNameW(&ofn))
+        return std::wstring(szFile);
+
+    return L"";
 }
