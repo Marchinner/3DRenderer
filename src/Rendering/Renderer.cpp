@@ -73,8 +73,8 @@ void Renderer::render()
         m_model->Draw(*m_shader);
 
     ImGui::BeginMainMenuBar();
-    ImGui::MenuItem("Modelo", nullptr, nullptr, false);
-    if (ImGui::MenuItem("Abrir", "Ctrl+O"))
+    ImGui::MenuItem("Model", nullptr, nullptr, false);
+    if (ImGui::MenuItem("Open", "Ctrl+O"))
     {
         std::wstring filename = OpenFileDialog();
 
@@ -95,7 +95,7 @@ void Renderer::render()
     }
     if (m_model)
     {
-        if (ImGui::MenuItem("Fechar"))
+        if (ImGui::MenuItem("Close"))
         {
             m_model = nullptr;
         }
