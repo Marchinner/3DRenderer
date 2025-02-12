@@ -16,3 +16,6 @@ A simple .obj file renderer made with C++ using OpenGL as rendering engine.
 - [ ] Shadows
 - [ ] Skybox cubemaps
 - [ ] Portuguese translation
+
+## Screenshots
+![A simple house](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/v1.0%20house.png)
