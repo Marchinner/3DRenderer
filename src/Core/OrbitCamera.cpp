@@ -25,7 +25,7 @@ glm::mat4 OrbitCamera::getViewMatrix() const
 glm::vec3 OrbitCamera::getCameraPosition() const
 {
     return glm::vec3{
-        distance * cos(pitch) * yaw,
+        distance * cos(pitch) * sin(yaw),
         distance * sin(pitch),
         distance * cos(pitch) * cos(yaw)
     } + target;
@@ -35,6 +35,12 @@ void OrbitCamera::processMouseMovement(float deltaX, float deltaY)
 {
     yaw += deltaX * sensitivity;
     pitch -= deltaY * sensitivity;
+
+    // Wrap yaw
+    if (yaw > glm::two_pi<float>()) yaw -= glm::two_pi<float>();
+    if (yaw < 0) yaw += glm::two_pi<float>();
+
+    // Clamp pitch
 
     pitch = std::clamp(pitch, -glm::half_pi<float>() + 0.1f, glm::half_pi<float>() - 0.1f);
 }
@@ -50,7 +56,7 @@ void OrbitCamera::processPan(float deltaX, float deltaY)
     glm::vec3 right = glm::normalize(glm::cross(getCameraPosition() - target, glm::vec3{ 0, 1, 0 }));
     glm::vec3 up = glm::vec3(0, 1, 0);
 
-    target -= right * deltaX * panSpeed;
+    target += right * deltaX * panSpeed;
     target += up * deltaY * panSpeed;
 }
 
