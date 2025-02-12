@@ -67,6 +67,8 @@ void Renderer::render()
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
     model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
     m_shader->setMat4("model", model);
+    m_shader->setFloat("ambientLightStrenght", m_ambientLightStrenght);
+    m_shader->setVec3("lightColor", m_ambientLightColor);
 
     if (m_model)
         m_model->Draw(*m_shader);
@@ -99,6 +101,14 @@ void Renderer::render()
             m_model = nullptr;
         }
     }
+
+    if (ImGui::BeginMenu("Ambient Light"))
+    {
+        ImGui::DragFloat("Strength", &m_ambientLightStrenght);
+        ImGui::ColorEdit3("Color", glm::value_ptr(m_ambientLightColor));
+        ImGui::EndMenu();
+    }
+
     ImGui::EndMainMenuBar();
 }
 

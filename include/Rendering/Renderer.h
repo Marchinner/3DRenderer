@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Core/Camera.h"
 #include <Models/Model.h>
+#include <glm/glm.hpp>
 
 class Logger;
 struct GLFWwindow;
@@ -27,5 +28,7 @@ private:
 	Logger& m_logger;
 	Model* m_model{ nullptr };
 	Shader* m_shader{ nullptr };
+	glm::vec3 m_ambientLightColor{1.0f, 1.0f, 1.0f};
+	float m_ambientLightStrenght{ 1.0f };
 };
 
