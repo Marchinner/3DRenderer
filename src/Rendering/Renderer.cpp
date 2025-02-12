@@ -57,7 +57,7 @@ void Renderer::clear() const
 void Renderer::render()
 {
     glm::mat4 proj = InputManager::getCamera()->getProjection();
-    glm::mat4 view = InputManager::getCamera()->getViewMatrix();
+    glm::mat4 view = InputManager::getOrbitCamera()->getViewMatrix();
 
     m_shader->use();
     m_shader->setMat4("projection", proj);
@@ -77,17 +77,27 @@ void Renderer::render()
     if (ImGui::MenuItem("Abrir", "Ctrl+O"))
     {
         std::wstring filename = OpenFileDialog();
-        
-        size_t required_size = 0;
-        errno_t err = wcstombs_s(&required_size, nullptr, 0, filename.c_str(), 0);
-        if (err == 0 || required_size != 0)
+
+        if (!filename.empty())
         {
-            std::string str(required_size, '\0');
-            wcstombs_s(&required_size, &str[0], required_size, filename.c_str(), required_size - 1);
+            size_t required_size = 0;
+            errno_t err = wcstombs_s(&required_size, nullptr, 0, filename.c_str(), 0);
+            if (err == 0 || required_size != 0)
+            {
+                std::string str(required_size, '\0');
+                wcstombs_s(&required_size, &str[0], required_size, filename.c_str(), required_size - 1);
 
-            str.pop_back();
+                str.pop_back();
 
-            m_model = new Model(str);
+                m_model = new Model(str);
+            }
+        }
+    }
+    if (m_model)
+    {
+        if (ImGui::MenuItem("Fechar Modelo"))
+        {
+            m_model = nullptr;
         }
     }
     ImGui::EndMainMenuBar();
@@ -110,7 +120,7 @@ void Renderer::setupOpenGL()
 {
     m_logger.log("Setting OpenGL settings...", Logger::Level::Info);
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    stbi_set_flip_vertically_on_load(true);
+    //stbi_set_flip_vertically_on_load(true);
     glEnable(GL_DEPTH_TEST);
 }
 

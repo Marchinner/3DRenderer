@@ -138,6 +138,7 @@
     <ClCompile Include="src\Core\Camera.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\InputManager.cpp" />
+    <ClCompile Include="src\Core\OrbitCamera.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Models\Mesh.cpp" />
     <ClCompile Include="src\Models\Model.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="include\Core\Application.h" />
     <ClInclude Include="include\Core\InputManager.h" />
+    <ClInclude Include="include\Core\OrbitCamera.h" />
     <ClInclude Include="include\Core\Window.h" />
     <ClInclude Include="include\Models\Mesh.h" />
     <ClInclude Include="include\Models\Model.h" />

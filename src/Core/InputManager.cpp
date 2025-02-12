@@ -36,3 +36,23 @@ Camera* InputManager::getCamera()
 {
     return m_camera;
 }
+
+OrbitCamera* InputManager::getOrbitCamera()
+{
+    return m_orbitCamera;
+}
+
+void InputManager::orbitMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    m_orbitCamera->mouseButtonCallback(button, action);
+}
+
+void InputManager::orbitCursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
+{
+    m_orbitCamera->cursorPositionCallback(xpos, ypos);
+}
+
+void InputManager::orbitScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    m_orbitCamera->processMouseScroll(yoffset);
+}
