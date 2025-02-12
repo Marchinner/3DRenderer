@@ -41,8 +41,7 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
     Renderer::setupOpenGL();
     Renderer::setupImgui(nativeWindow);
 
-    //m_model = new Model("./assets/models/backpack/backpack.obj");
-    m_shader = new Shader("shaders/backpack.vert", "shaders/backpack.frag");
+    m_shader = new Shader("shaders/default.vert", "shaders/default.frag");
 }
 
 Renderer::~Renderer() {}
