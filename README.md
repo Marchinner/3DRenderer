@@ -7,6 +7,10 @@ A simple .obj file renderer made with C++ using OpenGL as rendering engine.
 - Zoom with mouse middle button
 - Rotate the model with mouse left button
 
+## Platform
+- [X] Windows
+- [ ] Linux (will be available)
+
 ## Roadmap
 - [X] Fully working .obj renderer
 - [X] Complete camera controls
