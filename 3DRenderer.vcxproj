@@ -142,6 +142,7 @@
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Models\Mesh.cpp" />
     <ClCompile Include="src\Models\Model.cpp" />
+    <ClCompile Include="src\Models\Skybox.cpp" />
     <ClCompile Include="src\Program.cpp" />
     <ClCompile Include="src\RenderingCamera.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="include\Models\Mesh.h" />
     <ClInclude Include="include\Models\Model.h" />
     <ClInclude Include="include\Core\Camera.h" />
+    <ClInclude Include="include\Models\Skybox.h" />
     <ClInclude Include="include\Rendering\Renderer.h" />
     <ClInclude Include="include\Rendering\Shader.h" />
     <ClInclude Include="include\Utils\FileUtils.h" />

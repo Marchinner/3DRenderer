@@ -22,10 +22,12 @@ A simple .obj file renderer made with C++ using OpenGL as rendering engine.
 - [ ] Ambient Occlusion
 - [ ] Configurable multiple point lights
 - [ ] Shadows
-- [ ] Skybox cubemaps
+- [X] Skybox cubemaps
 - [ ] Portuguese translation
 
 ## Screenshot
+#### Skybox
+![New Model](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/skybox.png)
 #### New Model
 ![New Model](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/new-model.png)
 #### House model with Normal Map

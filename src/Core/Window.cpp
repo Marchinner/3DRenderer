@@ -37,6 +37,7 @@ bool Window::initialize()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
     m_logger.log("Creating application window...", Logger::Level::Info);
     m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);

@@ -42,6 +42,8 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
     Renderer::setupImgui(nativeWindow);
 
     m_shader = new Shader("shaders/default.vert", "shaders/default.frag");
+    m_skyboxShader = new Shader("shaders/skybox.vert", "shaders/skybox.frag");
+    m_skybox = new Skybox(*m_skyboxShader);
 }
 
 Renderer::~Renderer() {}
@@ -74,6 +76,15 @@ void Renderer::render()
 
     if (m_model)
         m_model->Draw(*m_shader);
+
+    m_skyboxShader->use();
+    view = glm::mat4{ glm::mat3{InputManager::getOrbitCamera()->getViewMatrix()} };
+    m_skyboxShader->setMat4("view", view);
+    m_skyboxShader->setMat4("projection", InputManager::getCamera()->getProjection());
+
+    glDepthFunc(GL_LEQUAL);
+    m_skybox->Draw(*m_skyboxShader);
+    glDepthFunc(GL_LESS);
 
     ImGui::BeginMainMenuBar();
     if (ImGui::BeginMenu("Model"))
@@ -131,8 +142,8 @@ void Renderer::render()
         ImGui::DragFloat3("Position", glm::value_ptr(m_directionalLightPosition));
         ImGui::EndMenu();
     }
-
     ImGui::EndMainMenuBar();
+
 }
 
 void Renderer::beginImguiFrame() const
@@ -154,6 +165,7 @@ void Renderer::setupOpenGL()
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     //stbi_set_flip_vertically_on_load(true);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE);
 }
 
 void Renderer::setupImgui(GLFWwindow* window)
