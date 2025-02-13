@@ -76,32 +76,46 @@ void Renderer::render()
         m_model->Draw(*m_shader);
 
     ImGui::BeginMainMenuBar();
-    ImGui::MenuItem("Model", nullptr, nullptr, false);
-    if (ImGui::MenuItem("Open", "Ctrl+O"))
+    if (ImGui::BeginMenu("Model"))
     {
-        std::wstring filename = OpenFileDialog();
-
-        if (!filename.empty())
+        ImGui::MenuItem("Invert Texture on Load", "", &m_bInvertTextureOnLoad);
+        if (ImGui::MenuItem("Open"))
         {
-            size_t required_size = 0;
-            errno_t err = wcstombs_s(&required_size, nullptr, 0, filename.c_str(), 0);
-            if (err == 0 || required_size != 0)
+            std::wstring filename = OpenFileDialog();
+
+            if (!filename.empty())
             {
-                std::string str(required_size, '\0');
-                wcstombs_s(&required_size, &str[0], required_size, filename.c_str(), required_size - 1);
+                size_t required_size = 0;
+                errno_t err = wcstombs_s(&required_size, nullptr, 0, filename.c_str(), 0);
+                if (err == 0 || required_size != 0)
+                {
+                    std::string str(required_size, '\0');
+                    wcstombs_s(&required_size, &str[0], required_size, filename.c_str(), required_size - 1);
 
-                str.pop_back();
+                    str.pop_back();
 
-                m_model = new Model(str);
+                    if (m_bInvertTextureOnLoad)
+                    {
+                        stbi_set_flip_vertically_on_load(true);
+                    }
+                    else
+                    {
+                        stbi_set_flip_vertically_on_load(false);
+                    }
+                    m_model = new Model(str);
+                }
             }
         }
-    }
-    if (m_model)
-    {
-        if (ImGui::MenuItem("Close"))
+
+        if (m_model)
         {
-            m_model = nullptr;
+            if (ImGui::MenuItem("Close"))
+            {
+                m_model = nullptr;
+            }
         }
+
+        ImGui::EndMenu();
     }
 
     if (ImGui::BeginMenu("Ambient Light"))
