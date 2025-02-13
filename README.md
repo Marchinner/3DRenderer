@@ -18,4 +18,5 @@ A simple .obj file renderer made with C++ using OpenGL as rendering engine.
 - [ ] Portuguese translation
 
 ## Screenshot
-![Sun light](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/v1.2%20diretional%20light.png)
+![Ambient Light](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/ambient-light.png)
+![Sun Light](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/directional-light.png)
