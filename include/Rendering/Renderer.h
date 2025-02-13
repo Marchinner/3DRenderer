@@ -30,5 +30,6 @@ private:
 	Shader* m_shader{ nullptr };
 	glm::vec3 m_ambientLightColor{1.0f, 1.0f, 1.0f};
 	float m_ambientLightStrenght{ 1.0f };
+	glm::vec3 m_directionalLightPosition{ 1.0f, 1.0f, 1.0f };
 };
 

@@ -7,7 +7,7 @@
 
 #include <imgui/imgui.h>
 
-#define SHOW_DEMO_UI
+//#define SHOW_DEMO_UI
 //#define SHOW_METRICS_UI
 
 Application::Application()
