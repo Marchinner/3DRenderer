@@ -67,7 +67,7 @@ void Renderer::render()
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
     model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
     m_shader->setMat4("model", model);
-    m_shader->setVec3("diretionalLightPosition", m_directionalLightPosition);
+    m_shader->setVec3("directionalLightPosition", m_directionalLightPosition);
     m_shader->setFloat("ambientLightStrenght", m_ambientLightStrenght);
     m_shader->setVec3("lightColor", m_ambientLightColor);
     m_shader->setVec3("viewPos", InputManager::getOrbitCamera()->getCameraPosition());
@@ -106,13 +106,14 @@ void Renderer::render()
 
     if (ImGui::BeginMenu("Ambient Light"))
     {
-        ImGui::DragFloat("Strength", &m_ambientLightStrenght);
+        ImGui::DragFloat("Strength", &m_ambientLightStrenght, 0.01f, 0.0f, 1.0f);
         ImGui::ColorEdit3("Color", glm::value_ptr(m_ambientLightColor));
         ImGui::EndMenu();
     }
 
     if (ImGui::BeginMenu("Directional Light"))
     {
+        ImGui::DragFloat("Strength", &m_ambientLightStrenght, 0.01f, 0.0f, 1.0f);
         ImGui::DragFloat3("Position", glm::value_ptr(m_directionalLightPosition));
         ImGui::EndMenu();
     }
