@@ -10,12 +10,12 @@ A simple .obj file renderer made with C++ using OpenGL as rendering engine.
 ## Roadmap
 - [X] Fully working .obj renderer
 - [X] Complete camera controls
-- [ ] Configurable ambient light
-- [ ] Configurable directional light
+- [x] Configurable ambient light
+- [x] Configurable directional light
 - [ ] Configurable multiple point lights
 - [ ] Shadows
 - [ ] Skybox cubemaps
 - [ ] Portuguese translation
 
-## Screenshots
-![A simple house](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/v1.0%20house.png)
+## Screenshot
+![Sun light](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/v1.2%20diretional%20light.png)
