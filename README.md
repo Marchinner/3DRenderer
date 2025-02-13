@@ -22,5 +22,11 @@ A simple .obj file renderer made with C++ using OpenGL as rendering engine.
 - [ ] Portuguese translation
 
 ## Screenshot
+#### New Model
+![New Model](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/new-model.png)
+#### House model with Normal Map
+![Normal Map](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/normal-map.png)
+#### Ambient and directional light
 ![Ambient Light](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/ambient-light.png)
 ![Sun Light](https://github.com/Marchinner/3DRenderer/blob/main/screenshots/directional-light.png)
+
