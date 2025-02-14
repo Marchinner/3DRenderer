@@ -147,8 +147,8 @@ void Renderer::render()
         ImGui::DragFloat("Scale", &m_fHeightScale, 0.0005f, 0.0f, 1.0f);
         ImGui::EndMenu();
     }
-
-    if (ImGui::BeginMenu("Point Lights"))
+    
+    if (ImGui::BeginMenu("Point Lights", false))
     {
         for (size_t i = 0; i < m_lightBulbModels.size(); i++)
         {
