@@ -18,7 +18,7 @@ A simple .obj file renderer made with C++ using OpenGL as rendering engine.
 - [x] Configurable directional light
 - [X] Specular maps
 - [X] Normal maps
-- [ ] Parallax/depth maps
+- [X] Parallax/depth maps
 - [ ] Ambient Occlusion
 - [ ] Configurable multiple point lights
 - [ ] Shadows
