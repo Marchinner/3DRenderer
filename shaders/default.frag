@@ -19,13 +19,18 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
     // number of depth layers
     const float minLayers = 8;
     const float maxLayers = 32;
-    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+    //float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+    // obtain normal from normal map in range [0,1]
+    vec3 normal = texture(texture_normal1, texCoords).rgb;
+    // transform normal vector to range [-1,1]
+    normal = normalize(normal * 2.0 - 1.0);  // this normal is in tangent space
+    float numLayers = mix(maxLayers, minLayers, abs(dot(normal, viewDir)));
     // calculate the size of each layer
     float layerDepth = 1.0 / numLayers;
     // depth of current layer
     float currentLayerDepth = 0.0;
     // the amount to shift the texture coordinates per layerDepth
-    vec2 P = viewDir.xy / viewDir.z * heightScale;
+    vec2 P = viewDir.xy * heightScale;
     vec2 deltaTexCoords = P / numLayers;
 
     // get initial values
