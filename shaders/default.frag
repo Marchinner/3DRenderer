@@ -12,6 +12,9 @@ uniform sampler2D texture_specular1;
 uniform sampler2D texture_normal1;
 uniform sampler2D texture_height1;
 
+uniform vec3 ambientLightColor;
+uniform float ambientLightStrength;
+
 uniform float heightScale;
 
 vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
@@ -84,9 +87,9 @@ void main()
     normal = normalize(normal * 2.0 - 1.0);  // this normal is in tangent space
    
     // get diffuse color
-    vec3 color = texture(texture_diffuse1, texCoords).rgb;
+    vec3 color = texture(texture_diffuse1, texCoords).rgb * vec3(ambientLightColor);
     // ambient
-    vec3 ambient = 0.1 * color;
+    vec3 ambient = ambientLightStrength * color;
     // diffuse
     vec3 lightDir = normalize(TangentLightPos - TangentFragPos);
     float diff = max(dot(lightDir, normal), 0.0);

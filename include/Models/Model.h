@@ -35,7 +35,7 @@ public:
     glm::vec3& getRotation() { return m_rotation; }
 
     // draws the model, and thus all its meshes
-    void Draw(Shader& shader, float heightScale, const glm::vec3& directionalLightPosition)
+    void Draw(Shader& shader, float heightScale, const glm::vec3& directionalLightPosition, const glm::vec3& ambientLightColor, const float ambientLightStrength)
     {
         glm::mat4 proj = InputManager::getCamera()->getProjection();
         glm::mat4 view = InputManager::getOrbitCamera()->getViewMatrix();
@@ -55,6 +55,8 @@ public:
         shader.setMat4("model", m_model);
         shader.setFloat("heightScale", heightScale);
         shader.setVec3("lightPos", directionalLightPosition);
+        shader.setVec3("ambientLightColor", ambientLightColor);
+        shader.setFloat("ambientLightStrength", ambientLightStrength);
         //shader.setVec3("viewPos", InputManager::getOrbitCamera()->getCameraPosition());
 
         for (unsigned int i = 0; i < meshes.size(); i++)

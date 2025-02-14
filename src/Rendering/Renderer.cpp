@@ -60,11 +60,11 @@ void Renderer::clear() const
 void Renderer::render()
 {
     if (m_model)
-        m_model->Draw(*m_shader, m_fHeightScale, m_directionalLightPosition);
+        m_model->Draw(*m_shader, m_fHeightScale, m_directionalLightPosition, m_ambientLightColor, m_ambientLightStrenght);
 
     for (auto& lightBulb : m_lightBulbModels)
     {
-        lightBulb->Draw(*m_lightbulbShader, m_fHeightScale, m_directionalLightPosition);
+        lightBulb->Draw(*m_lightbulbShader, m_fHeightScale, m_directionalLightPosition, m_ambientLightColor, m_ambientLightStrenght);
     }
 
     m_skyboxShader->use();
