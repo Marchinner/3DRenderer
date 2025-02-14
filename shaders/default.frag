@@ -1,35 +1,52 @@
-#version 460 core
+#version 450 core
 out vec4 FragColor;
 
-in vec2 TexCoords;
 in vec3 FragPos;
-in vec3 Normal;
+in vec2 TexCoords;
+in vec3 TangentLightPos;
+in vec3 TangentViewPos;
+in vec3 TangentFragPos;
 
-uniform vec3 directionalLightPosition;
-uniform float ambientLightStrenght;
-uniform vec3 lightColor;
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
 uniform sampler2D texture_normal1;
+uniform sampler2D texture_height1;
+
+uniform vec3 lightPos;
 uniform vec3 viewPos;
 
-float specularstrength = 0.5;
+uniform float height_scale;
+
+vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir);
 
 void main()
 {
-    //vec3 norm = normalize(Normal);
-    vec3 norm = texture(texture_normal1, TexCoords).rgb;
-    norm = normalize(norm * 2.0 - 1.0);
-    vec3 lightDir = normalize(directionalLightPosition - FragPos);
-    float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * lightColor;
-    vec3 ambientLight = ambientLightStrenght * lightColor;
+	// obtain normal from normal map in range [0,1]
+    vec3 normal = texture(texture_normal1, TexCoords).rgb;
+    // transform normal vector to range [-1,1]
+    normal = normalize(normal * 2.0 - 1.0);  // this normal is in tangent space
+   
+    // get diffuse color
+    vec3 color = texture(texture_diffuse1, TexCoords).rgb;
+    // ambient
+    vec3 ambient = 0.1 * color;
+    // diffuse
+    vec3 lightDir = normalize(TangentLightPos - TangentFragPos);
+    float diff = max(dot(lightDir, normal), 0.0);
+    vec3 diffuse = diff * color;
     // specular
-    vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 320);
-    vec3 specular = specularstrength * spec * texture(texture_specular1, TexCoords).rgb;
+    vec3 viewDir = normalize(TangentViewPos - TangentFragPos);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    vec3 halfwayDir = normalize(lightDir + viewDir);  
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
 
-    vec3 result = (ambientLight + diffuse + specular) * texture(texture_diffuse1, TexCoords).rgb;
-    FragColor = vec4(result, 1.0);
+    vec3 specular = vec3(0.2) * spec;
+    FragColor = vec4(ambient + diffuse + specular, 1.0);
 }
+
+vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
+{ 
+    float height =  texture(depthMap, texCoords).r;    
+    vec2 p = viewDir.xy / viewDir.z * (height * height_scale);
+    return texCoords - p;    
+} 
