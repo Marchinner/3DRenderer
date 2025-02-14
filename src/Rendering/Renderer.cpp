@@ -69,7 +69,7 @@ void Renderer::render()
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
     model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
     m_shader->setMat4("model", model);
-
+    m_shader->setFloat("heightScale", m_fHeightScale);
     m_shader->setVec3("lightPos", m_directionalLightPosition);
     m_shader->setVec3("viewPos", InputManager::getOrbitCamera()->getCameraPosition());
 
@@ -139,6 +139,12 @@ void Renderer::render()
     {
         ImGui::DragFloat("Strength", &m_ambientLightStrenght, 0.01f, 0.0f, 1.0f);
         ImGui::DragFloat3("Position", glm::value_ptr(m_directionalLightPosition));
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Height Map"))
+    {
+        ImGui::DragFloat("Scale", &m_fHeightScale, 0.0005f, 0.0f, 1.0f);
         ImGui::EndMenu();
     }
     ImGui::EndMainMenuBar();
