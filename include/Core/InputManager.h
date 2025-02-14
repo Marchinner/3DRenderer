@@ -1,19 +1,16 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
 #include <array>
 #include <Core/Camera.h>
 #include "OrbitCamera.h"
+
+struct GLFWwindow;
 
 class InputManager
 {
 public:
 	static void keyCallback(GLFWwindow* window, int key, int scancode,
-		int action, int mods)
-	{
-		if (action == GLFW_PRESS) m_keysPressed[key] = true;
-		if (action == GLFW_RELEASE) m_keysPressed[key] = false;
-	}
+		int action, int mods);
 
 	static bool isKeyDown(int key) { return m_keysPressed[key]; }
 	static void mouseCallback(GLFWwindow* window, double xPos, double yPos);

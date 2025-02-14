@@ -4,7 +4,7 @@
 #include "Utils/Logger.h"
 #include "Core/InputManager.h"
 #include "Core/Camera.h"
-
+#include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
 
 //#define SHOW_DEMO_UI

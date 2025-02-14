@@ -35,6 +35,7 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
                 std::cerr << "GL ERROR: " << message << std::endl;
             }
         }, nullptr);
+
     glEnable(GL_DEBUG_OUTPUT);
 
     // OpenGL settings
@@ -42,6 +43,7 @@ Renderer::Renderer(GLFWwindow* nativeWindow)
     Renderer::setupImgui(nativeWindow);
 
     m_shader = new Shader("shaders/default.vert", "shaders/default.frag");
+    m_lightbulbShader = new Shader("shaders/lightbulb.vert", "shaders/lightbulb.frag");
     m_skyboxShader = new Shader("shaders/skybox.vert", "shaders/skybox.frag");
     m_skybox = new Skybox(*m_skyboxShader);
 }
@@ -57,33 +59,20 @@ void Renderer::clear() const
 
 void Renderer::render()
 {
-    glm::mat4 proj = InputManager::getCamera()->getProjection();
-    glm::mat4 view = InputManager::getOrbitCamera()->getViewMatrix();
-
-    m_shader->use();
-    m_shader->setMat4("projection", proj);
-    m_shader->setMat4("view", view);
-
-    // render the loaded model
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-    model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-    m_shader->setMat4("model", model);
-    m_shader->setFloat("heightScale", m_fHeightScale);
-    m_shader->setVec3("lightPos", m_directionalLightPosition);
-    m_shader->setVec3("viewPos", InputManager::getOrbitCamera()->getCameraPosition());
-
     if (m_model)
-        m_model->Draw(*m_shader);
+        m_model->Draw(*m_shader, m_fHeightScale, m_directionalLightPosition);
+
+    for (auto& lightBulb : m_lightBulbModels)
+    {
+        lightBulb->Draw(*m_lightbulbShader, m_fHeightScale, m_directionalLightPosition);
+    }
 
     m_skyboxShader->use();
-    view = glm::mat4{ glm::mat3{InputManager::getOrbitCamera()->getViewMatrix()} };
+    glm::mat4 view{ glm::mat4{ glm::mat3{InputManager::getOrbitCamera()->getViewMatrix()} } };
     m_skyboxShader->setMat4("view", view);
     m_skyboxShader->setMat4("projection", InputManager::getCamera()->getProjection());
 
-    glDepthFunc(GL_LEQUAL);
     m_skybox->Draw(*m_skyboxShader);
-    glDepthFunc(GL_LESS);
 
     ImGui::BeginMainMenuBar();
     if (ImGui::BeginMenu("Model"))
@@ -113,15 +102,26 @@ void Renderer::render()
                         stbi_set_flip_vertically_on_load(false);
                     }
                     m_model = new Model(str);
+
+                    // restore working dir for other models
+                    std::filesystem::current_path(m_path);
                 }
             }
         }
+
 
         if (m_model)
         {
             if (ImGui::MenuItem("Close"))
             {
                 m_model = nullptr;
+            }
+
+            if (m_model) {
+                ImGui::Separator();
+
+                ImGui::DragFloat3("Position", glm::value_ptr(m_model->getPosition()));
+                ImGui::DragFloat3("Rotation", glm::value_ptr(m_model->getRotation()));
             }
         }
 
@@ -147,6 +147,39 @@ void Renderer::render()
         ImGui::DragFloat("Scale", &m_fHeightScale, 0.0005f, 0.0f, 1.0f);
         ImGui::EndMenu();
     }
+
+    if (ImGui::BeginMenu("Point Lights"))
+    {
+        for (size_t i = 0; i < m_lightBulbModels.size(); i++)
+        {
+            ImGui::PushID(i);
+            ImGui::Text("Point Light %d", i);
+            ImGui::DragFloat3("Position", glm::value_ptr(m_lightBulbModels[i]->getPosition()));
+            //ImGui::ColorEdit3("Color", glm::value_ptr(m_lightBulbModels[i]->getColor()));
+            //ImGui::DragFloat("Strength", &m_lightBulbModels[i]->getStrength(), 0.01f, 0.0f, 1.0f);
+            ImGui::PopID();
+        }
+        if (ImGui::Button("Add Point Light"))
+        {
+            std::filesystem::path path = "assets/models/lightbulb/lightbulb.obj";
+            m_lightBulbModels.push_back(new Model(path.string()));
+        }
+        ImGui::SameLine();
+        if (m_lightBulbModels.size() > 0)
+        {
+            if (ImGui::Button("Remove Point Light"))
+            {
+                if (!m_lightBulbModels.empty())
+                {
+                    delete m_lightBulbModels.back();
+                    m_lightBulbModels.pop_back();
+                }
+            }
+        }
+
+        ImGui::EndMenu();
+    }
+
     ImGui::EndMainMenuBar();
 
 }

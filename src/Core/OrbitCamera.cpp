@@ -1,5 +1,6 @@
 #include "Core/OrbitCamera.h"
 #include <algorithm>
+#include <GLFW/glfw3.h>
 
 OrbitCamera::OrbitCamera(glm::vec3 target, float distance)
     : target{target}

@@ -1,14 +1,16 @@
 #include "Models/Model.h"
+#include <glad/glad.h>
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
-#include <glad/glad.h>
 #include <stb/stb_image.h>
 
 void Model::loadModel(std::string path)
 {
     // read file via ASSIMP
     Assimp::Importer importer;
+
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+
     // check for errors
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
@@ -16,7 +18,7 @@ void Model::loadModel(std::string path)
         return;
     }
     // retrieve the directory path of the filepath
-    directory = path.substr(0, path.find_last_of('\\'));
+    directory = path.substr(0, path.find('/') != std::string::npos ? path.find_last_of('/') : path.find_last_of('\\'));
 
     // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene);

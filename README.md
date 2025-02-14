@@ -19,7 +19,6 @@ A simple .obj file renderer made with C++ using OpenGL as rendering engine.
 - [X] Specular maps
 - [X] Normal maps
 - [X] Parallax/depth maps
-- [ ] Ambient Occlusion
 - [ ] Configurable multiple point lights
 - [ ] Shadows
 - [X] Skybox cubemaps

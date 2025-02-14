@@ -78,11 +78,13 @@ Skybox::Skybox(Shader& shader)
 void Skybox::Draw(Shader& shader)
 {
     // Skybox cube
+    glDepthFunc(GL_LEQUAL);
     glBindVertexArray(m_skyboxVAO);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_cubemapTexture);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
+    glDepthFunc(GL_LESS);
 }
 
 unsigned int Skybox::loadCubemap(std::vector<std::string> faces)

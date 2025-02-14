@@ -1,4 +1,11 @@
 #include "Core/InputManager.h"
+#include <GLFW/glfw3.h>
+
+void InputManager::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS) m_keysPressed[key] = true;
+    if (action == GLFW_RELEASE) m_keysPressed[key] = false;
+}
 
 void InputManager::mouseCallback(GLFWwindow* window, double xPos, double yPos)
 {
