@@ -4,6 +4,44 @@
 #include "assimp/postprocess.h"
 #include <stb/stb_image.h>
 
+Model::Model(std::string const& path, bool gamma)
+    : gammaCorrection(gamma)
+{
+    loadModel(path);
+
+    m_model = glm::translate(m_model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+    m_model = glm::scale(m_model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+}
+
+void Model::Draw(Shader& shader, float heightScale, const glm::vec3& directionalLightPosition, const glm::vec3& ambientLightColor, const float ambientLightStrength)
+{
+    glm::mat4 proj = InputManager::getCamera()->getProjection();
+    glm::mat4 view = InputManager::getOrbitCamera()->getViewMatrix();
+
+    shader.use();
+    shader.setMat4("projection", proj);
+    shader.setMat4("view", view);
+
+    m_model = glm::mat4(1.0f);
+    m_model = glm::translate(m_model, getPosition());
+    m_model = glm::rotate(m_model, glm::radians(getRotation().x), glm::vec3{ 1.0f, 0.0f, 0.0f });
+    m_model = glm::rotate(m_model, glm::radians(getRotation().y), glm::vec3{ 0.0f, 1.0f, 0.0f });
+    m_model = glm::rotate(m_model, glm::radians(getRotation().z), glm::vec3{ 0.0f, 0.0f, 1.0f });
+
+
+    // render the loaded model
+    shader.setMat4("model", m_model);
+    shader.setFloat("heightScale", heightScale);
+    shader.setVec3("lightPos", directionalLightPosition);
+    shader.setVec3("viewPos", InputManager::getOrbitCamera()->getCameraPosition());
+    shader.setVec3("ambientLightColor", ambientLightColor);
+    shader.setFloat("ambientLightStrength", ambientLightStrength);
+    //shader.setVec3("viewPos", InputManager::getOrbitCamera()->getCameraPosition());
+
+    for (unsigned int i = 0; i < meshes.size(); i++)
+        meshes[i].Draw(shader);
+}
+
 void Model::loadModel(std::string path)
 {
     // read file via ASSIMP
